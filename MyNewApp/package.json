@@ -1,0 +1,38 @@
+{
+  "name": "myexpoapp",
+ 
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^14.0.4",
+    "@react-native-async-storage/async-storage": "^2.1.0",
+    "@react-native-picker/picker": "^2.10.2",
+    "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/stack": "^7.1.0",
+    "axios": "^1.7.9",
+    "expo": "~51.0.14",
+    "expo-router": "^4.0.11",
+    "expo-status-bar": "~2.0.0",
+    "jwt-decode": "^4.0.0",
+    "react": "^18.2.0",
+    "react-native": "^0.74.2",
+    "react-native-elements": "^3.4.3",
+    "react-native-paper": "^5.12.5",
+    "react-native-safe-area-context": "^5.0.0",
+    "react-native-screens": "^4.3.0",
+    "react-native-svg": "^15.10.1",
+    "react-native-vector-icons": "^10.2.0",
+    "twrnc": "^4.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}

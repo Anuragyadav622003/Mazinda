@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")  // Connection string for MongoDB Atlas
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  wallet    Wallet?  // Optional relation to Wallet
+}
+
+model Wallet {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  balance      Float          @default(0.0)
+  userId       String         @unique @db.ObjectId  // Reference to the User model
+  user         User           @relation(fields: [userId], references: [id])  // Relation to User model
+  transactions Transaction[]  // One-to-many relation with Transaction model
+}
+
+model Transaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  walletId  String   @db.ObjectId  // Foreign key referencing Wallet
+  amount    Float
+  type      String   // "send" or "receive"
+  category  String
+  createdAt DateTime @default(now())
+  wallet    Wallet   @relation(fields: [walletId], references: [id])  // Relation to Wallet model
+}

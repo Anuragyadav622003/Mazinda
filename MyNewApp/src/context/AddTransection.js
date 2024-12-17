@@ -9,6 +9,7 @@ export const addTransaction = async (transactionData) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        "Authorization":''
       },
       body: JSON.stringify(transactionData),
     });

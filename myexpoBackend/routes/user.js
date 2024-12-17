@@ -113,12 +113,16 @@ router.post('/login', async (req, res) => {
 });
 
 // Route to get all users (example)
-router.get('/users', async (req, res) => {
+router.get('/accounts/list', async (req, res) => {
+  
+
   try {
-    const users = await prisma.user.findMany();
-    res.status(200).json(users);
+    const users = await prisma.user.findMany({
+    
+    });
+    
+    res.status(200).json( users );
   } catch (error) {
-    console.error('Error fetching users:', error);
     res.status(500).json({ error: 'Error fetching users' });
   }
 });
@@ -194,6 +198,87 @@ router.post("/transaction", async (req, res) => {
   } catch (error) {
     console.error("Error creating transaction:", error);
     res.status(500).json({ error: "Failed to create transaction" });
+  }
+});
+
+
+// Route to activate user account and update wallet status
+router.post('/accounts/activate/:id', async (req, res) => {
+  const { id } = req.params; // Extract the ID from the request params
+  
+
+  try {
+    // Fetch the user with the given ID
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+    console.log(existingUser)
+
+    // If the user does not exist
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user status and wallet status
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        status:  true,
+        walletStatus:"FROZEN" ,
+      },
+    });
+
+    // Send the updated user data
+    return res.status(200).json({
+      message: 'User account updated successfully',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error('Error updating user:', error.message);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+});
+
+
+
+// Route to deactivate user account and freeze wallet status
+router.post('/accounts/deactivate/:id', async (req, res) => {
+  const { id } = req.params; // Extract the ID from the request params
+console.log("id recieve",id)
+  try {
+    // Fetch the user with the given ID
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+ console.log(existingUser);
+    // If the user does not exist
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user status to 'false' and walletStatus to 'FROZEN'
+    const deactivatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        status: false, // Set account status to false (deactivated)
+        walletStatus: 'UNFROZEN', // Freeze the wallet
+      },
+    });
+
+    // Send the updated user data
+    return res.status(200).json({
+      message: 'User account deactivated successfully',
+      user: deactivatedUser,
+    });
+  } catch (error) {
+    console.error('Error deactivating user:', error.message);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
   }
 });
 export default router;

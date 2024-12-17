@@ -10,8 +10,8 @@ export default function AdminPanel() {
       <h1 className="text-2xl font-bold">Admin Panel</h1>
       <AccountList />
       {/* Example usage for Wallet and Account Controls */}
-      {/* <WalletControl walletId="12345" status="active" />
-      <AccountControl accountId="12345" /> */}
+      <WalletControl walletId="12345" status="active" /> 
+      <AccountControl accountId="12345" /> 
     </div>
   );
 }

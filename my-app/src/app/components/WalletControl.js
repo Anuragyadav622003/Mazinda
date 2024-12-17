@@ -2,14 +2,15 @@
 
 import React from "react";
 import axios from "axios";
+import baseUrl from "@/data/accounts";
 import { useMutation } from "react-query";
 
 const freezeWallet = async (id) => {
-  await axios.post(`/api/wallets/freeze/${id}`);
+  await axios.post(`${baseUrl}/user/wallets/freeze/${id}`);
 };
 
 const unfreezeWallet = async (id) => {
-  await axios.post(`/api/wallets/unfreeze/${id}`);
+  await axios.post(`${baseUrl}/user/wallets/unfreeze/${id}`);
 };
 
 const WalletControl = ({ walletId, status }) => {

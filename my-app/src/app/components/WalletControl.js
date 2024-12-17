@@ -6,11 +6,11 @@ import baseUrl from "@/data/accounts";
 import { useMutation } from "react-query";
 
 const freezeWallet = async (id) => {
-  await axios.post(`${baseUrl}/user/wallets/freeze/${id}`);
+  await axios.post(`${baseUrl}/user/wallet/freeze/${id}`);
 };
 
 const unfreezeWallet = async (id) => {
-  await axios.post(`${baseUrl}/user/wallets/unfreeze/${id}`);
+  await axios.post(`${baseUrl}/user/wallet/unfreeze/${id}`);
 };
 
 const WalletControl = ({ walletId, status }) => {

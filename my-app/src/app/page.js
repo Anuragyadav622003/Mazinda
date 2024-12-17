@@ -1,7 +1,7 @@
 // app/admin/page.js
 "use client"
 import AccountList from "./components/AccountList";
-import WalletControl from "./components/WalletControl";
+
 import AccountControl from "./components/AccountControl";
 
 export default function AdminPanel() {
@@ -10,8 +10,7 @@ export default function AdminPanel() {
       <h1 className="text-2xl font-bold">Admin Panel</h1>
       <AccountList />
       {/* Example usage for Wallet and Account Controls */}
-      <WalletControl walletId="12345" status="active" /> 
-      <AccountControl accountId="12345" /> 
+      {/* <AccountControl accountId="12345" />  */}
     </div>
   );
 }

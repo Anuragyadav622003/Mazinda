@@ -224,7 +224,7 @@ router.post('/accounts/activate/:id', async (req, res) => {
       where: { id },
       data: {
         status:  true,
-        walletStatus:"FROZEN" ,
+        
       },
     });
 
@@ -264,7 +264,7 @@ console.log("id recieve",id)
       where: { id },
       data: {
         status: false, // Set account status to false (deactivated)
-        walletStatus: 'UNFROZEN', // Freeze the wallet
+      
       },
     });
 
@@ -281,4 +281,69 @@ console.log("id recieve",id)
     });
   }
 });
+
+
+
+// Route to freeze user wallet
+router.post('/wallet/freeze/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: { walletStatus: 'FROZEN' }, // Freeze wallet status
+    });
+
+    return res.status(200).json({
+      message: 'User wallet frozen successfully',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error('Error freezing user wallet:', error.message);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+});
+
+// Route to unfreeze user wallet
+router.post('/wallet/unfreeze/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: { walletStatus: 'UNFROZEN' }, // Unfreeze wallet status
+    });
+
+    return res.status(200).json({
+      message: 'User wallet unfrozen successfully',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error('Error unfreezing user wallet:', error.message);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+});
+
 export default router;

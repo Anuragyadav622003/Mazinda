@@ -3,9 +3,10 @@
 import express from 'express';
 import cors from 'cors';
 import userRoutes from './routes/user.js'
-
+import dotenv from 'dotenv';
 const app = express();
 
+dotenv.config(); // Load environment variables from .env file
 // Middleware
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); // Middleware to parse JSON data

@@ -6,15 +6,23 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")  // Connection string for MongoDB Atlas
 }
+enum WalletStatus {
+  FROZEN
+  UNFROZEN
+}
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  username  String   @unique
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  wallet    Wallet?  // Optional relation to Wallet
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  username     String      @unique
+  email        String      @unique
+  password     String
+  createdAt    DateTime    @default(now())
+  wallet       Wallet?     // Optional relation to Wallet
+  status       Boolean     @default(true)   // true for active, false for inactive
+  walletStatus WalletStatus @default(UNFROZEN)  // Add wallet status (frozen or unfrozen)
 }
+
+
 
 model Wallet {
   id           String         @id @default(auto()) @map("_id") @db.ObjectId

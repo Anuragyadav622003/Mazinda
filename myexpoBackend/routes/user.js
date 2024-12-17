@@ -21,7 +21,7 @@ router.post('/create-user', async (req, res) => {
 
   // Check if all required fields are provided
   if (!username || !email || !password) {
-    return res.status(400).json({ error: 'All fields are required' });
+    return res.status(400).json({ error: 'All fields are requireddddddd' });
   }
 
   try {
@@ -123,4 +123,77 @@ router.get('/users', async (req, res) => {
   }
 });
 
+
+// Route for Wallet Section
+router.post("/wallet", async (req, res) => {
+  const { userId, balance } = req.body;
+
+  try {
+    // Ensure the user exists in the User model
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Check if the user already has a wallet
+    const existingWallet = await prisma.wallet.findUnique({
+      where: { userId: userId },
+    });
+
+    if (existingWallet) {
+      return res.status(400).json({ error: "Duplicate wallet not allowed for this user" });
+    }
+
+    // Create the wallet and link it to the user
+    const wallet = await prisma.wallet.create({
+      data: {
+        userId, // Reference to the User's ID
+        balance: balance || 0.0,
+      },
+      include: {
+        user: true, // Optional: Include the user data in the response
+      },
+    });
+
+    res.status(201).json(wallet);
+  } catch (error) {
+    console.error("Error creating wallet:", error);
+    res.status(500).json({ error: "Failed to create wallet" });
+  }
+});
+
+
+// Route for creating a transaction
+router.post("/transaction", async (req, res) => {
+  const { walletId, amount, type, category } = req.body;
+
+  try {
+    // Ensure that the wallet exists
+    const wallet = await prisma.wallet.findUnique({
+      where: { id: walletId },
+    });
+
+    if (!wallet) {
+      return res.status(404).json({ error: "Wallet not found" });
+    }
+
+    // Create the transaction
+    const transaction = await prisma.transaction.create({
+      data: {
+        walletId,
+        amount,
+        type,       // "send" or "receive"
+        category,   // Transaction category (e.g., "payment", "deposit", etc.)
+      },
+    });
+
+    res.status(201).json(transaction);
+  } catch (error) {
+    console.error("Error creating transaction:", error);
+    res.status(500).json({ error: "Failed to create transaction" });
+  }
+});
 export default router;
